@@ -46,7 +46,7 @@ import {
     //Create Village ground
     const groundMat = new StandardMaterial("groundMat");
     groundMat.diffuseTexture = new Texture("https://assets.babylonjs.com/environments/villagegreen.png");
-    groundMat.diffuseTexture.hasAlpha = true;
+    groundMat.diffuseTexture.hasAlpha = true; 
 
     const ground = MeshBuilder.CreateGround("ground", {width:24, height:24});
     ground.material = groundMat;
