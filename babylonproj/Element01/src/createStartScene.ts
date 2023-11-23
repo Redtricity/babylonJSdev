@@ -16,9 +16,13 @@ import {
   CubeTexture,
   DirectionalLight,
   ShadowGenerator,
+
 } from "@babylonjs/core";
 
-//---Functions---//
+//----------------------------------------------------
+//MIDDLE OF CODE - FUNCTIONS
+//----------------------------------------------------
+
 
 function createLight(scene: Scene) {
   const light = new HemisphericLight("light", new Vector3(0, 10, 0), scene);
@@ -42,7 +46,7 @@ function createPlanet(scene: Scene) {
 }
 
 function createStar(scene: Scene, position: Vector3) {
-  let star = MeshBuilder.CreateSphere("star", { diameter: 0.2, segments: 16 }, scene);
+  let star = MeshBuilder.CreateSphere("star", { diameter: 0.1, segments: 16 }, scene);
   star.position = position;
 
   let starMaterial = new StandardMaterial("starMaterial", scene);
@@ -118,8 +122,24 @@ function createArcRotateCamera(scene: Scene) {
   return camera;
 }
 
+	// Skybox
+	function skyBox(scene: Scene)
+  {
+    const skybox = MeshBuilder.CreateBox("skyBox", {size:150}, scene);
+	  const skyboxMaterial = new StandardMaterial("skyBox", scene);
+	  skyboxMaterial.backFaceCulling = false;
+	  skyboxMaterial.reflectionTexture = new CubeTexture("textures/space", scene);
+	  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
+	  skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
+	  skyboxMaterial.specularColor = new Color3(0, 0, 0);
+	  skybox.material = skyboxMaterial;
+    return skybox;
+  }
 
-
+  //----------------------------------------------------------
+  //BOTTOM OF CODE - MAIN RENDERING AREA FOR YOUR SCENE
+  //----------------------------------------------------------
+  
 export default function createSpaceScene(engine: Engine) {
   interface SceneData {
     scene: Scene;
@@ -127,6 +147,7 @@ export default function createSpaceScene(engine: Engine) {
     planet?: Mesh;
     stars?: Mesh[];
     camera?: Camera;
+    skybox?: Mesh;
     moon?: Mesh;
     moonLight?: DirectionalLight;
   }
@@ -140,6 +161,7 @@ export default function createSpaceScene(engine: Engine) {
   that.camera = createArcRotateCamera(that.scene);
   that.moon = createMoon(that.scene);
   that.moonLight = createMoonLight(that.scene, that.moon);
+  that.skybox = skyBox(that.scene);
 
   // Create stars at different positions
   that.stars = [];
