@@ -31,7 +31,7 @@ import {
   //----------------------------------------------------
 
 
-  //create terrain
+  //Create terrain
   function createTerrain(scene: Scene) 
   {
     const largeGroundMat = new StandardMaterial("largeGroundMat", scene);
@@ -62,6 +62,7 @@ import {
   function createAntenna(scene: Scene) 
   {
     const antennaMat = new StandardMaterial("antennaMat", scene);
+    antennaMat.diffuseColor = new Color3(0.2, 0.4, 0.8); // Set the color to blue
     
     // Create a sphere to represent the rounded part of the antenna
     const SphereLarge = MeshBuilder.CreateSphere("Sphere", { diameter: 0.5, segments: 16 }, scene);
@@ -88,16 +89,38 @@ import {
   }
   
   function cloneAntenna(scene: Scene) {
-    // Clone the original antenna
+    //Clone the original antenna
     //const clonedAntenna = originalAntenna.clone("clonedAntenna", null, true);
     const clonedAntenna: any = createAntenna(scene);
   
     // Add the cloned antenna to the scene
-    clonedAntenna.position = new Vector3(5, 1, -4); 
+    clonedAntenna.position = new Vector3(5, 0, -4); 
     //scene.addMesh(clonedAntenna);
   
     return clonedAntenna;
   }
+
+  //Creating sprite aliens
+  function createAliens(scene: Scene) {
+    const spriteManagerAliens = new SpriteManager("alienManager", "src/BlueAlien.png", 2000, { width: 512, height: 1024 }, scene);
+
+  // Create trees at random positions on the left side
+  for (let i = 0; i < 500; i++) {
+    const alien = new Sprite("alien", spriteManagerAliens);
+    alien.position.x = Math.random() * (-100); // Increased x-axis range for left side
+    alien.position.z = Math.random() * 200 + 8; // Increased z-axis range
+    alien.position.y = Math.random() * 10; // Increased y-axis range
+  }
+
+  // Create aliens at random positions on the right side
+  for (let i = 0; i < 500; i++) {
+    const alien = new Sprite("tree", spriteManagerAliens);
+    alien.position.x = Math.random() * 100 + 100; // Increased x-axis range for right side
+    alien.position.z = Math.random() * -200 + 8; // Increased z-axis range for opposite direction
+    alien.position.y = Math.random() * 5; // Increased y-axis range
+  }
+  return spriteManagerAliens;
+}
 
 //----------------------------------------------------------
 
@@ -173,7 +196,8 @@ function createArcRotateCamera(scene: Scene) {
       hemisphericLight?: HemisphericLight;
       camera?: Camera;
       clone?: any;
-      
+      aliens?: SpriteManager;
+
       
     }
   
@@ -185,6 +209,7 @@ function createArcRotateCamera(scene: Scene) {
     that.skybox = skyBox(that.scene);
     that.antenna = createAntenna(that.scene);
     that.clone = cloneAntenna(that.scene);
+    that.aliens = createAliens(that.scene);
     
     
     

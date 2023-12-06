@@ -26,8 +26,7 @@ import {
 
 function createLight(scene: Scene) {
   const light = new HemisphericLight("light", new Vector3(0, 10, 0), scene);
-  light.intensity = 1.5; // Increase the intensity
-  // ... other light settings
+  light.intensity = 1.5; 
   return light;
 }
 
@@ -36,7 +35,6 @@ function createPlanet(scene: Scene) {
   planet.position.y = 1;
 
   let planetMaterial = new StandardMaterial("planetMaterial", scene);
-  //planetMaterial.diffuseColor = new Color3(0, 0, 1);
   planetMaterial.diffuseTexture = new Texture("textures/8k_earth_daymap.jpg", scene); // Adding the texture
   planet.material = planetMaterial;
 
@@ -55,12 +53,12 @@ function createStar(scene: Scene, position: Vector3) {
 
   // Function to continuously animate the star's emissive color for a twinkling effect
   let animateStar = () => {
-    // Change the emissive color at intervals to create a sparkling effect
+    // Change the emissive color at intervals to create a sparkly effect
     setInterval(() => {
       starMaterial.emissiveColor = new Color3(
-        1, // Adjust the R component as needed (1 for maximum)
-        1, // Adjust the G component as needed (1 for maximum)
-        Math.random() // Random B component (0 to 1)
+        1, 
+        1, 
+        Math.random() 
       );
     }, 500); // Change every 0.5 seconds (adjust the timing as needed)
   };
@@ -73,6 +71,7 @@ function createStar(scene: Scene, position: Vector3) {
   return star;
 }
 
+//function to create the Moon
 function createMoon(scene: Scene) {
   let moon = MeshBuilder.CreateSphere("moon", { diameter: 1, segments: 32 }, scene);
   moon.position = new Vector3(4, 2, 0); // Position the moon accordingly
@@ -86,6 +85,8 @@ function createMoon(scene: Scene) {
 
   return moon;
 }
+
+//function to createMoonLight
 function createMoonLight(scene: Scene, moon: Mesh) {
   const moonLight = new DirectionalLight("moonLight", new Vector3(0, -1, 0), scene);
   moonLight.intensity = 0.8; // Adjust intensity as needed
@@ -104,7 +105,7 @@ function createMoonLight(scene: Scene, moon: Mesh) {
   return moonLight;
 }
 
-
+// ArcRotateCamera
 function createArcRotateCamera(scene: Scene) {
   let camAlpha = -Math.PI / 2,
     camBeta = Math.PI / 2.5,

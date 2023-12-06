@@ -36,13 +36,13 @@ import {
 
 
 
-  //Create Skybox
-  function createSkybox(scene: Scene) {
-    //Skybox
+  // Skybox
+	function skyBox(scene: Scene)
+  {
     const skybox = MeshBuilder.CreateBox("skyBox", {size:150}, scene);
 	  const skyboxMaterial = new StandardMaterial("skyBox", scene);
 	  skyboxMaterial.backFaceCulling = false;
-	  skyboxMaterial.reflectionTexture = new CubeTexture("textures/skybox", scene);
+	  skyboxMaterial.reflectionTexture = new CubeTexture("textures/space", scene);
 	  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
 	  skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
 	  skyboxMaterial.specularColor = new Color3(0, 0, 0);
@@ -107,31 +107,51 @@ function createArcRotateCamera(scene: Scene) {
   return camera;
 }
 
-// //MIDDLE OF CODE - FUNCTIONS
 
-function createSceneButton(scene: Scene, name: string, index: string, x: string,
-  y: string, advtex){
-   var button = GUI.Button.CreateSimpleButton(name, index);
-   button.left = x;
-   button.top = y;
-   button.width = "160px"
-   button.height = "60px";
-   button.color = "white";
-   button.cornerRadius = 20;
-   button.background = "green";
-   
-   const buttonClick = new Sound("MenuClickSFX", "./audio/menu-click.wav", scene, null, {
+function createSceneButton(scene: Scene, name: string, index: string, x: string, y: string, advtex) {
+  var button = GUI.Button.CreateSimpleButton(name, index);
+  button.left = x;
+  button.top = y;
+  button.width = "160px"
+  button.height = "60px";
+  button.color = "white";
+  button.cornerRadius = 20;
+  button.background = "#00008B"; // Dark blue color
+
+  const buttonClick = new Sound("MenuClickSFX", "./audio/515823__matrixxx__select-granted-04.wav", scene, null, {
     loop: false,
     autoplay: false,
-   });
+  });
 
-   button.onPointerUpObservable.add(function() {
+  button.onPointerUpObservable.add(function () {
     buttonClick.play();
     setSceneIndex(1);
-   });
-   advtex.addControl(button);
-   return button;
-  } 
+  });
+  advtex.addControl(button);
+  return button;
+
+  
+}
+
+function createBackgroundMusic(scene: Scene) {
+  const backgroundMusic = new Sound("BackgroundMusic", "./audio/discovery-sound.wav", scene, null, {
+    loop: true,
+    autoplay: true,
+  });
+
+  Engine.audioEngine!.useCustomUnlockedButton = true;
+
+  // Unlock audio on first user interaction.
+  window.addEventListener('click', () => {
+    if(!Engine.audioEngine!.unlocked){
+        Engine.audioEngine!.unlock();
+    }
+  }, { once: true });
+
+  return backgroundMusic;
+}
+
+
 
 
 // //----------------------------------------------------------
@@ -146,13 +166,15 @@ function createSceneButton(scene: Scene, name: string, index: string, x: string,
       hemisphericLight?: HemisphericLight;
       camera?: Camera;
       importMesh?: any; 
+      backgroundMusic?: Sound; 
       
     }
   
     let that: SceneData = { scene: new Scene(engine) };
     that.scene.debugLayer.show();
     
-    that.skybox = createSkybox(that.scene);
+    that.skybox = skyBox(that.scene);
+    that.backgroundMusic = createBackgroundMusic(that.scene); // Initialize background music
     
 
     let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI", true);

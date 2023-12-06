@@ -324,6 +324,34 @@ scene.onBeforeRenderObservable.add(()=> {
 });
   return item;
  }
+
+ function createStar(scene: Scene, position: Vector3) {
+  let star = MeshBuilder.CreateSphere("star", { diameter: 0.1, segments: 16 }, scene);
+  star.position = position;
+
+  let starMaterial = new StandardMaterial("starMaterial", scene);
+  starMaterial.emissiveColor = new Color3(1, 1, 1); // White color for the star
+  star.material = starMaterial; // Ensure the material is assigned to the star
+
+  // Function to continuously animate the star's emissive color for a twinkling effect
+  let animateStar = () => {
+    // Change the emissive color at intervals to create a sparkling effect
+    setInterval(() => {
+      starMaterial.emissiveColor = new Color3(
+        1, // Adjust the R component as needed (1 for maximum)
+        1, // Adjust the G component as needed (1 for maximum)
+        Math.random() // Random B component (0 to 1)
+      );
+    }, 500); // Change every 0.5 seconds (adjust the timing as needed)
+  };
+
+  // Call the function to start the animation
+  animateStar();
+
+  // Shadows for the star
+  star.receiveShadows = true;
+  return star;
+}
  
 //----------------------------------------------------------
 

@@ -31,48 +31,40 @@ import {
   AnimationPropertiesOverride,
   } from "@babylonjs/core";
 
+  
+  //Initialisation of Physics (Havok)
   let initializedHavok;
-HavokPhysics().then((havok) => {
- initializedHavok = havok;
-});
-const havokInstance = await HavokPhysics();
-const havokPlugin = new HavokPlugin(true, havokInstance);
+  HavokPhysics().then((havok) => {
+    initializedHavok = havok;
+  });
 
-globalThis.HK = await HavokPhysics();
+  const havokInstance = await HavokPhysics();
+  const havokPlugin = new HavokPlugin(true, havokInstance);
+
+  globalThis.HK = await HavokPhysics();
+  
   // ------------------------------------------
   
   //functions
 
   //-------------------------------------------
 
-  //create terrain
-
-  // function createTerrain(scene: Scene) {
-  //   //Create large ground for valley environment
-  //   const largeGroundMat = new StandardMaterial("largeGroundMat");
-  //   largeGroundMat.diffuseTexture = new Texture("https://assets.babylonjs.com/environments/valleygrass.png");
-    
-  //   const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "https://assets.babylonjs.com/environments/villageheightmap.png", {width:150, height:150, subdivisions: 20, minHeight:0, maxHeight: 10});
-  //   largeGround.material = largeGroundMat;
-  //   return largeGround;
-  // }
+  
 
   // //Create more detailed ground
-  // function createGround(scene: Scene) {
-  //   //Create Village ground
-  //   const groundMat = new StandardMaterial("groundMat");
-  //   groundMat.diffuseTexture = new Texture("https://assets.babylonjs.com/environments/villagegreen.png");
-  //   groundMat.diffuseTexture.hasAlpha = true;
+  function createGround(scene: Scene) {
 
-  //   const ground = MeshBuilder.CreateGround("ground", {width:24, height:24});
-  //   const groundAggregate = new PhysicsAggregate(ground, PhysicsShapeType.BOX, { mass: 0 },
-  //     scene);
-  //      return ground
-  //   ground.material = groundMat;
-  //   ground.position.y = 0.01;
+    const groundMat = new StandardMaterial("groundMat");
+    groundMat.diffuseTexture = new Texture("./textures/8k_moon.jpg");
+    groundMat.diffuseTexture.hasAlpha = true;
+
+    const ground = MeshBuilder.CreateGround("ground", {width:24, height:24});
+    const groundAggregate = new PhysicsAggregate(ground, PhysicsShapeType.BOX, { mass: 0 }, scene);
+    ground.material = groundMat;  
+    ground.position.y = 30;
     
-  //   return ground;
-  // }
+    return ground;
+  }
 
   //create terrain
   function createTerrain(scene: Scene) 
@@ -81,9 +73,9 @@ globalThis.HK = await HavokPhysics();
     largeGroundMat.diffuseTexture = new Texture("textures/8k_moon.jpg");
 
     const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "textures/8k_moon_inverted.jpg", {width:600, height:600, subdivisions: 1500, minHeight:0, maxHeight: 2});
-    const groundAggregate = new PhysicsAggregate(largeGround, PhysicsShapeType.BOX, { mass: 0 },
-      scene);
-      //groundAggregate.position.y
+    const groundAggregate = new PhysicsAggregate(largeGround, PhysicsShapeType.BOX, { mass: 0 }, scene);
+    //groundAggregate.transformNode.position.y = 2;
+    //groundAggregate.position.y
     largeGround.material = largeGroundMat;
     largeGround.receiveShadows = true;
     return largeGround;
@@ -104,27 +96,18 @@ globalThis.HK = await HavokPhysics();
   }
 
   function createBox(scene, x, y, z){
-    let box: Mesh = MeshBuilder.CreateBox("box", scene);
-    box.position.x = x;
-    box.position.y = y;
-    box.position.z = z;
-    const boxAggregate = new PhysicsAggregate(box, PhysicsShapeType.BOX, { mass: 1 }, scene);
-    return box;
+  let box: Mesh = MeshBuilder.CreateBox("box", { size: 1 }, scene);
+  box.position = new Vector3(x, y, z);
+
+  // Create a dark blue material
+  const material = new StandardMaterial("darkBlue", scene);
+  material.diffuseColor = new Color3(0, 0, 0.5); // Adjust the RGB values to get the desired dark blue shade
+  box.material = material;
+
+  const boxAggregate = new PhysicsAggregate(box, PhysicsShapeType.BOX, { mass: 1 }, scene);
+  return box;
   }
 
-  // //Create Skybox
-  // function createSkybox(scene: Scene) {
-  //   //Skybox
-  //   const skybox = MeshBuilder.CreateBox("skyBox", {size:150}, scene);
-	//   const skyboxMaterial = new StandardMaterial("skyBox", scene);
-	//   skyboxMaterial.backFaceCulling = false;
-	//   skyboxMaterial.reflectionTexture = new CubeTexture("textures/skybox", scene);
-	//   skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
-	//   skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
-	//   skyboxMaterial.specularColor = new Color3(0, 0, 0);
-	//   skybox.material = skyboxMaterial;
-  //   return skybox;
-  // }
 
 
 //----------------------------------------------------------------------------------------------
@@ -283,6 +266,35 @@ function actionManager(scene: Scene){
   return scene.actionManager;
 } 
 
+function createStar(scene: Scene, position: Vector3) {
+  let star = MeshBuilder.CreateSphere("star", { diameter: 0.1, segments: 16 }, scene);
+  star.position = position;
+
+  let starMaterial = new StandardMaterial("starMaterial", scene);
+  starMaterial.emissiveColor = new Color3(0, 0, 0.5); // Dark blue color for the star
+  star.material = starMaterial; // Ensure the material is assigned to the star
+
+  // Function to continuously animate the star's emissive color for a twinkling effect
+  let animateStar = () => {
+    // Change the emissive color at intervals to create a sparkling effect
+    setInterval(() => {
+      starMaterial.emissiveColor = new Color3(
+        0, 
+        0, 
+        Math.random() * 0.5 
+      );
+    }, 500); // Change every 0.5 seconds (adjust the timing as needed)
+  };
+
+  // Call the function to start the animation
+  animateStar();
+
+  // Shadows for the star
+  star.receiveShadows = true;
+  return star;
+}
+
+
 
 //----------------------------------------------------------
 
@@ -305,20 +317,43 @@ function actionManager(scene: Scene){
       camera?: Camera;
       importMesh?: any; 
       actionManager?: any; 
+      stars?: Mesh[];
     }
   
     let that: SceneData = { scene: new Scene(engine) };
     that.scene.debugLayer.show();
     that.scene.enablePhysics(new Vector3(0, -9.8, 0), havokPlugin);
 
-    that.box = createBox(that.scene, 2, 2, 2);
+    that.box = createBox(that.scene, 2, 5, 2);
 
     //any further code goes here
-    that.terrain = createTerrain(that.scene);
+    //that.terrain = createTerrain(that.scene);
+    that.ground = createGround(that.scene);
     that.skybox = skyBox(that.scene);
     that.actionManager = actionManager(that.scene);
     that.importMesh = importPlayerMesh(that.scene, that.box, 0, 0);
 
+    // Create stars at different positions
+  that.stars = [];
+  that.stars.push(createStar(that.scene, new Vector3(5, 5, -5)));
+  that.stars.push(createStar(that.scene, new Vector3(-3, 2, 4)));
+  that.stars.push(createStar(that.scene, new Vector3(1, 6, -3)));
+  that.stars.push(createStar(that.scene, new Vector3(-2, 3, 2)));
+  that.stars.push(createStar(that.scene, new Vector3(4, 7, -1)));
+  that.stars.push(createStar(that.scene, new Vector3(2, 3, 5)));
+  that.stars.push(createStar(that.scene, new Vector3(-5, 6, -4)));
+  that.stars.push(createStar(that.scene, new Vector3(0, 4, 3)));
+  that.stars.push(createStar(that.scene, new Vector3(3, 6, 1)));
+  that.stars.push(createStar(that.scene, new Vector3(2, 4, 3)));
+  that.stars.push(createStar(that.scene, new Vector3(1, 3, -5)));
+  that.stars.push(createStar(that.scene, new Vector3(-4, 5, 5)));
+  that.stars.push(createStar(that.scene, new Vector3(-1, 4, -2)));
+  that.stars.push(createStar(that.scene, new Vector3(4, 2, 1)));
+  that.stars.push(createStar(that.scene, new Vector3(-3, 5, -4)));
+  that.stars.push(createStar(that.scene, new Vector3(-5, 5, 6)));
+  that.stars.push(createStar(that.scene, new Vector3(-4, 4, 9)));
+  that.stars.push(createStar(that.scene, new Vector3(6, 2, 8)));
+  that.stars.push(createStar(that.scene, new Vector3(-5, 5, -5)));
 
 
     //Scene Lighting & Camera
