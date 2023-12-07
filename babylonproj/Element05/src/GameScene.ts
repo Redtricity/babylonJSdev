@@ -82,9 +82,9 @@ import {
   let box: Mesh = MeshBuilder.CreateBox("box", { size: 1 }, scene);
   box.position = new Vector3(x, y, z);
 
-  // Create a dark blue material
-  const material = new StandardMaterial("darkBlue", scene);
-  material.diffuseColor = new Color3(0, 0, 0.5); // Adjust the RGB values to get the desired dark blue shade
+ 
+  const material = new StandardMaterial("yellowMaterial", scene);
+  material.diffuseColor = new Color3(1, 1, 0); // Set the RGB values for yellow
   box.material = material;
 
   const boxAggregate = new PhysicsAggregate(box, PhysicsShapeType.BOX, { mass: 1 }, scene);
@@ -110,17 +110,31 @@ import {
     planet.position.y = 1;
   
     let planetMaterial = new StandardMaterial("planetMaterial", scene);
-    //planetMaterial.diffuseColor = new Color3(0, 0, 1);
-    planetMaterial.diffuseTexture = new Texture("babylonproj/Element05/textures/8k_earth_nightmap.jpg", scene); // Adding the texture
+    // planetMaterial.diffuseColor = new Color3(0, 0, 1);
+    planetMaterial.diffuseTexture = new Texture("./src/8k_sun.jpg", scene); // Adding the texture
     planet.material = planetMaterial;
+
   
-    // Shadows for the planet
-    planet.receiveShadows = true;
     planet.position.x = px;
     planet.position.y = py;
     planet.position.z = pz;
     return planet;
   }
+
+  function createSecondPlanet(scene: Scene, px: number, py: number, pz: number) {
+    let secondPlanet = createPlanet(scene, px, py, pz); // Reusing the existing createPlanet function
+    secondPlanet.scaling = new Vector3(0.5, 0.5, 0.5); // Scaling the second planet down
+    secondPlanet.position.x = px + 10; // Positioning the second planet to the right of the first one
+    secondPlanet.position.y = py - 2; // Lowering the second planet
+    secondPlanet.position.z = pz;
+
+    let secondPlanetMaterial = new StandardMaterial("secondPlanetMaterial", scene);
+    //planetMaterial.diffuseColor = new Color3(0, 0, 1);
+    secondPlanetMaterial.diffuseTexture = new Texture("./src/8k_jupiter.jpg", scene); // Adding the texture
+    secondPlanet.material = secondPlanetMaterial;
+
+    return secondPlanet;
+}
 
 //----------------------------------------------------------------------------------------------
 
@@ -140,14 +154,14 @@ function createAnyLight(scene: Scene, index: number, px: number, py: number, pz:
       shadowGenerator.useExponentialShadowMap = true;
       return spotLight;
       break;
-    case 3: //point light
-      const pointLight = new PointLight("pointLight", new Vector3(px, py, pz), scene);
-      pointLight.diffuse = new Color3(colX, colY, colZ); //0.39, 0.44, 0.91
-      shadowGenerator = new ShadowGenerator(1024, pointLight);
-      shadowGenerator.addShadowCaster(mesh);
-      shadowGenerator.useExponentialShadowMap = true;
-      return pointLight;
-      break;
+    // case 3: //point light
+    //   const pointLight = new PointLight("pointLight", new Vector3(px, py, pz), scene);
+    //   pointLight.diffuse = new Color3(colX, colY, colZ); //0.39, 0.44, 0.91
+    //   shadowGenerator = new ShadowGenerator(1024, pointLight);
+    //   shadowGenerator.addShadowCaster(mesh);
+    //   shadowGenerator.useExponentialShadowMap = true;
+    //   return pointLight;
+    //   break;
   }
 }
 
@@ -345,10 +359,7 @@ function createClickableBox(scene: Scene, x: number, y: number, z: number) {
       ground?: Mesh;
       skybox?: Mesh;
       trees?: SpriteManager;
-      //You can uncomment if you wish to have them produced separately
       box?: Mesh;
-      //roof?: Mesh;
-      //BAD PRACTICE in TypeScript but a working solution for the time being.
       house?: any;
       light?: Light;
       hemisphericLight?: HemisphericLight;
@@ -358,10 +369,11 @@ function createClickableBox(scene: Scene, x: number, y: number, z: number) {
       stars?: Mesh[];
       planet?: Mesh;
       jupiter?: Mesh;
+      secondPlanet?: Mesh;
     }
 
     
-  
+
     let that: SceneData = { scene: new Scene(engine) };
     that.scene.debugLayer.show();
     that.scene.enablePhysics(new Vector3(0, -9.8, 0), havokPlugin);
@@ -378,12 +390,17 @@ function createClickableBox(scene: Scene, x: number, y: number, z: number) {
       if (that.planet) {
         that.planet.rotation.y += 0.002; //Rotation speed
       }
+
+      if (that.secondPlanet) {
+        that.secondPlanet.rotation.z += 0.002; //Rotation speed
+      }
     });
 
    that.box = createBox(that.scene, 2, 5, 2);
    that.ground = createGround(that.scene);
-   that.box = createClickableBox(that.scene, 7, 0.5, 7);
-   that.planet = createPlanet(that.scene, 2, 9, 5);
+   that.box = createClickableBox(that.scene, 7, 0.5, -2);
+   that.planet = createPlanet(that.scene, -4, 7, 5);
+   that.secondPlanet = createSecondPlanet(that.scene, -4, 5, 8);
    
 
     //any further code goes here

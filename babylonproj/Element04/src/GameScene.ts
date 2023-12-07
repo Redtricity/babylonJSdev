@@ -302,10 +302,7 @@ function createStar(scene: Scene, position: Vector3) {
       ground?: Mesh;
       skybox?: Mesh;
       trees?: SpriteManager;
-      //You can uncomment if you wish to have them produced separately
       box?: Mesh;
-      //roof?: Mesh;
-      //BAD PRACTICE in TypeScript but a working solution for the time being.
       house?: any;
       light?: Light;
       hemisphericLight?: HemisphericLight;
