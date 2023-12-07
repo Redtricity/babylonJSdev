@@ -26,7 +26,7 @@ import {
 
 function createLight(scene: Scene) {
   const light = new HemisphericLight("light", new Vector3(0, 10, 0), scene);
-  light.intensity = 1.5; 
+  light.intensity = 0.9; 
   return light;
 }
 
@@ -86,24 +86,30 @@ function createMoon(scene: Scene) {
   return moon;
 }
 
-//function to createMoonLight
-function createMoonLight(scene: Scene, moon: Mesh) {
-  const moonLight = new DirectionalLight("moonLight", new Vector3(0, -1, 0), scene);
-  moonLight.intensity = 0.8; // Adjust intensity as needed
-  moonLight.diffuse = Color3.White(); // Set the light color
+// //function to createMoonLight
+// function createMoonLight(scene: Scene, moon: Mesh) {
+//   const moonLight = new DirectionalLight("moonLight", new Vector3(0, -1, 0), scene);
+//   moonLight.intensity = 0.8; // Adjust intensity as needed
+//   moonLight.diffuse = Color3.White(); // Set the light color
 
-  // Position the moonLight behind the moon to cast shadows
-  moonLight.position = new Vector3(moon.position.x, moon.position.y, moon.position.z - 2);
+//   // Position the moonLight behind the moon to cast shadows
+//   moonLight.position = new Vector3(moon.position.x, moon.position.y, moon.position.z - 2);
 
-  // Set light's target to the moon to help shadow direction
-  moonLight.setDirectionToTarget(moon.position);
+//   var lightSphere = Mesh.CreateSphere("sphere", 10, 2, scene);
+//     var lightspheremat = new StandardMaterial("lightspheremat",scene)
+//        lightSphere.position = moonLight.position;
+//       lightSphere.material = new StandardMaterial("light", scene);
 
-  // Enable shadows for the light
-  const shadowGenerator = new ShadowGenerator(1024, moonLight);
-  shadowGenerator.addShadowCaster(moon);
+//   // Set light's target to the moon to help shadow direction
+//   moonLight.setDirectionToTarget(moon.position);
 
-  return moonLight;
-}
+//   // Enable shadows for the light
+//   const shadowGenerator = new ShadowGenerator(1024, moonLight);
+//   shadowGenerator.addShadowCaster(moon);
+
+
+//   return moonLight;
+// }
 
 // ArcRotateCamera
 function createArcRotateCamera(scene: Scene) {
@@ -137,6 +143,39 @@ function createArcRotateCamera(scene: Scene) {
     return skybox;
   }
 
+  //function to create a Box
+function createBox(scene: Scene) {
+  let box = MeshBuilder.CreateBox("box", { size: 1 }, scene);
+  box.position = new Vector3(0, 1, 0); // Position the box at a height
+  box.receiveShadows = true; // Allow the box to receive shadows
+  return box;
+}
+
+//function to create a Ground
+function createGround(scene: Scene) {
+  let ground = MeshBuilder.CreateGround("ground", { width: 10, height: 10 }, scene);
+  ground.receiveShadows = true; // Allow the ground to receive shadows
+  return ground;
+}
+
+function createdirectionallight(scene: Scene, mesh1:Mesh,mesh2:Mesh){
+  var light = new DirectionalLight("dir01", new Vector3(-9, -2, -1), scene);
+  light.position = new Vector3(20, 20, 20);
+  light.intensity = 0.5;
+ light.diffuse = new Color3(150, 150, 150);
+  var lightSphere = Mesh.CreateSphere("sphere", 10, 2, scene);
+  var lightspheremat = new StandardMaterial("lightspheremat",scene)
+     lightSphere.position = light.position;
+    lightSphere.material = new StandardMaterial("light", scene);
+  var shadowGenerator = new ShadowGenerator(1024, light);
+  shadowGenerator.addShadowCaster(mesh1);
+  shadowGenerator.addShadowCaster(mesh2);
+  shadowGenerator.useExponentialShadowMap = true;
+ //(1, 1, 0);
+   light.intensity = 10;
+}
+
+
   //----------------------------------------------------------
   //BOTTOM OF CODE - MAIN RENDERING AREA FOR YOUR SCENE
   //----------------------------------------------------------
@@ -150,7 +189,7 @@ export default function createSpaceScene(engine: Engine) {
     camera?: Camera;
     skybox?: Mesh;
     moon?: Mesh;
-    moonLight?: DirectionalLight;
+    //moonLight?: DirectionalLight;
   }
 
   let that: SceneData = { scene: new Scene(engine) };
@@ -161,8 +200,9 @@ export default function createSpaceScene(engine: Engine) {
   that.planet = createPlanet(that.scene);
   that.camera = createArcRotateCamera(that.scene);
   that.moon = createMoon(that.scene);
-  that.moonLight = createMoonLight(that.scene, that.moon);
+  //that.moonLight = createMoonLight(that.scene, that.moon);
   that.skybox = skyBox(that.scene);
+  createdirectionallight(that.scene, that.planet, that.moon);
 
   // Create stars at different positions
   that.stars = [];
@@ -182,6 +222,7 @@ export default function createSpaceScene(engine: Engine) {
   that.stars.push(createStar(that.scene, new Vector3(4, 2, 1)));
   that.stars.push(createStar(that.scene, new Vector3(-3, 5, -4)));
 
+  //that.light = 
 
   engine.runRenderLoop(() => {
     if (that.scene) {

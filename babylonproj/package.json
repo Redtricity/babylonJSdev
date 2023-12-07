@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "Element01": "tsc && vite build Element01",
+    "Element01build": "tsc && vite build Element01",
     "Element01preview": "vite preview Element01"
   },
   "devDependencies": {

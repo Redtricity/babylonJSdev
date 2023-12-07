@@ -58,66 +58,66 @@ import {
   }
 
 
-  //Creating the Antenna Function
+  
   function createAntenna(scene: Scene) 
   {
     const antennaMat = new StandardMaterial("antennaMat", scene);
-    antennaMat.diffuseColor = new Color3(0.2, 0.4, 0.8); // Set the color to blue
+    antennaMat.diffuseColor = new Color3(0.2, 0.4, 0.8); 
     
-    // Create a sphere to represent the rounded part of the antenna
+    
     const SphereLarge = MeshBuilder.CreateSphere("Sphere", { diameter: 0.5, segments: 16 }, scene);
     SphereLarge.material = antennaMat;
     
-    // Create a cylinder to represent the long skinny part of the antenna
+    
     const cylinder = MeshBuilder.CreateCylinder("cylinder", { height: 1, diameter: 0.1, tessellation: 7 }, scene);
     cylinder.material = antennaMat;
-    cylinder.rotation.y = Math.PI / 2; // Rotate the cylinder to point upwards
+    cylinder.rotation.y = Math.PI / 2; 
   
-    // Create a small sphere for detail
+    
     const SphereSmall = MeshBuilder.CreateSphere("sphere", { diameter: 0.2, segments: 7 }, scene);
     SphereSmall.material = antennaMat;
   
-    // Position the parts to form an antenna shape
-    SphereLarge.position = new Vector3(3, 1, -4); // Adjust position as needed for the sphere
-    cylinder.position = new Vector3(3, 1.5, -4); // Adjust position to place the cylinder on top of the sphere
-    SphereSmall.position = new Vector3(3, 2, -4); // Adjust position as needed for the small sphere
+    
+    SphereLarge.position = new Vector3(3, 1, -4); 
+    cylinder.position = new Vector3(3, 1.5, -4); 
+    SphereSmall.position = new Vector3(3, 2, -4); 
   
-    // Group the meshes into a parent mesh
+    
     const antenna = Mesh.MergeMeshes([SphereLarge, cylinder, SphereSmall], true, false, undefined, false, true);
   
     return antenna;
   }
   
   function cloneAntenna(scene: Scene) {
-    //Clone the original antenna
+    
     //const clonedAntenna = originalAntenna.clone("clonedAntenna", null, true);
     const clonedAntenna: any = createAntenna(scene);
   
-    // Add the cloned antenna to the scene
+    
     clonedAntenna.position = new Vector3(5, 0, -4); 
     //scene.addMesh(clonedAntenna);
   
     return clonedAntenna;
   }
 
-  //Creating sprite aliens
+  
   function createAliens(scene: Scene) {
     const spriteManagerAliens = new SpriteManager("alienManager", "src/BlueAlien.png", 2000, { width: 512, height: 1024 }, scene);
 
-  // Create trees at random positions on the left side
+  
   for (let i = 0; i < 500; i++) {
     const alien = new Sprite("alien", spriteManagerAliens);
-    alien.position.x = Math.random() * (-100); // Increased x-axis range for left side
-    alien.position.z = Math.random() * 200 + 8; // Increased z-axis range
-    alien.position.y = Math.random() * 10; // Increased y-axis range
+    alien.position.x = Math.random() * (-100); 
+    alien.position.z = Math.random() * 200 + 8;
+    alien.position.y = Math.random() * 10; 
   }
 
-  // Create aliens at random positions on the right side
+  
   for (let i = 0; i < 500; i++) {
     const alien = new Sprite("tree", spriteManagerAliens);
-    alien.position.x = Math.random() * 100 + 100; // Increased x-axis range for right side
-    alien.position.z = Math.random() * -200 + 8; // Increased z-axis range for opposite direction
-    alien.position.y = Math.random() * 5; // Increased y-axis range
+    alien.position.x = Math.random() * 100 + 100; 
+    alien.position.z = Math.random() * -200 + 8; 
+    alien.position.y = Math.random() * 5; 
   }
   return spriteManagerAliens;
 }
@@ -155,14 +155,14 @@ function createAnyLight(scene: Scene, index: number, px: number, py: number, pz:
   }
 }
 
-//Light Function
+
 function createHemiLight(scene: Scene) {
   const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
   light.intensity = 0.8;
   return light;
 }
 
-//Camera Function
+
 function createArcRotateCamera(scene: Scene) {
   let camAlpha = -Math.PI / 2,
     camBeta = Math.PI / 2.5,
@@ -198,7 +198,6 @@ function createArcRotateCamera(scene: Scene) {
       clone?: any;
       aliens?: SpriteManager;
 
-      
     }
   
     let that: SceneData = { scene: new Scene(engine) };
@@ -213,7 +212,6 @@ function createArcRotateCamera(scene: Scene) {
     
     
     
-    //Lights and Camera
     that.hemisphericLight = createHemiLight(that.scene);
     that.camera = createArcRotateCamera(that.scene);
     return that;

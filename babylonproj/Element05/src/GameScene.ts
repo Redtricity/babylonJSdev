@@ -10,7 +10,6 @@ import {
   Scene,
   ArcRotateCamera,
   Vector3,
-  Vector4,
   HemisphericLight,
   SpotLight,
   MeshBuilder,
@@ -21,17 +20,15 @@ import {
   StandardMaterial,
   Texture,
   Color3,
-  Space,
   ShadowGenerator,
   PointLight,
-  DirectionalLight,
   CubeTexture,
-  Sprite,
   SpriteManager,
   SceneLoader,
   ActionManager,
   ExecuteCodeAction,
   AnimationPropertiesOverride,
+  
   } from "@babylonjs/core";
 
  //Initialisation of Physics (Havok)
@@ -44,11 +41,11 @@ import {
  const havokPlugin = new HavokPlugin(true, havokInstance);
 
  globalThis.HK = await HavokPhysics();
+
 //------------------------------------------
 //functions
 // -------------------------------------------
 
-  
   function createGround(scene: Scene) {
  
     const groundMat = new StandardMaterial("groundMat");
@@ -58,12 +55,13 @@ import {
     const ground = MeshBuilder.CreateGround("ground", {width:24, height:24});
     const groundAggregate = new PhysicsAggregate(ground, PhysicsShapeType.BOX, { mass: 0 }, scene);
     ground.material = groundMat;  
+    ground.receiveShadows = true;
     ground.position.y = 30;
     
     return ground;
   }
 
-  //create terrain
+
   function createTerrain(scene: Scene) 
   {
     const largeGroundMat = new StandardMaterial("largeGroundMat", scene);
@@ -82,7 +80,6 @@ import {
   let box: Mesh = MeshBuilder.CreateBox("box", { size: 1 }, scene);
   box.position = new Vector3(x, y, z);
 
- 
   const material = new StandardMaterial("yellowMaterial", scene);
   material.diffuseColor = new Color3(1, 1, 0); // Set the RGB values for yellow
   box.material = material;
@@ -91,7 +88,7 @@ import {
   return box;
   }
 
-  // Skybox
+  
 	function skyBox(scene: Scene)
   {
     const skybox = MeshBuilder.CreateBox("skyBox", {size:150}, scene);
@@ -114,11 +111,12 @@ import {
     planetMaterial.diffuseTexture = new Texture("./src/8k_sun.jpg", scene); // Adding the texture
     planet.material = planetMaterial;
 
-  
     planet.position.x = px;
     planet.position.y = py;
     planet.position.z = pz;
-    return planet;
+    
+ 
+  return planet;
   }
 
   function createSecondPlanet(scene: Scene, px: number, py: number, pz: number) {
@@ -133,20 +131,19 @@ import {
     secondPlanetMaterial.diffuseTexture = new Texture("./src/8k_jupiter.jpg", scene); // Adding the texture
     secondPlanet.material = secondPlanetMaterial;
 
-    return secondPlanet;
+  return secondPlanet;
 }
 
-//----------------------------------------------------------------------------------------------
 
 function createAnyLight(scene: Scene, index: number, px: number, py: number, pz: number, colX: number, colY: number, colZ: number, mesh: Mesh) {
-  // only spotlight, point and directional can cast shadows in BabylonJS
+
   switch (index) {
-    case 1: //hemispheric light
+    case 1: 
       const hemiLight = new HemisphericLight("hemiLight", new Vector3(px, py, pz), scene);
       hemiLight.intensity = 0.1;
       return hemiLight;
       break;
-    case 2: //spot light
+    case 2: 
       const spotLight = new SpotLight("spotLight", new Vector3(px, py, pz), new Vector3(0, -1, 0), Math.PI / 3, 10, scene);
       spotLight.diffuse = new Color3(colX, colY, colZ); //0.39, 0.44, 0.91
       let shadowGenerator = new ShadowGenerator(1024, spotLight);
@@ -154,20 +151,20 @@ function createAnyLight(scene: Scene, index: number, px: number, py: number, pz:
       shadowGenerator.useExponentialShadowMap = true;
       return spotLight;
       break;
-    // case 3: //point light
-    //   const pointLight = new PointLight("pointLight", new Vector3(px, py, pz), scene);
-    //   pointLight.diffuse = new Color3(colX, colY, colZ); //0.39, 0.44, 0.91
-    //   shadowGenerator = new ShadowGenerator(1024, pointLight);
-    //   shadowGenerator.addShadowCaster(mesh);
-    //   shadowGenerator.useExponentialShadowMap = true;
-    //   return pointLight;
-    //   break;
+    case 3: 
+      const pointLight = new PointLight("pointLight", new Vector3(px, py, pz), scene);
+      pointLight.diffuse = new Color3(colX, colY, colZ); //0.39, 0.44, 0.91
+      shadowGenerator = new ShadowGenerator(1024, pointLight);
+      shadowGenerator.addShadowCaster(mesh);
+      shadowGenerator.useExponentialShadowMap = true;
+      return pointLight;
+      break;
   }
 }
 
 function createHemiLight(scene: Scene) {
   const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-  light.intensity = 0.8;
+  light.intensity = 0.5;
   return light;
 }
 
@@ -189,7 +186,7 @@ function createArcRotateCamera(scene: Scene) {
   return camera;
 }
 
-//MIDDLE OF CODE - FUNCTIONS
+
 let keyDownMap: any[] = [];
 let currentSpeed: number = 0.1;
 let walkingSpeed: number = 0.1;
@@ -297,40 +294,39 @@ function createStar(scene: Scene, position: Vector3) {
   star.position = position;
 
   let starMaterial = new StandardMaterial("starMaterial", scene);
-  starMaterial.emissiveColor = new Color3(0, 0, 0.5); // Dark blue color for the star
-  star.material = starMaterial; // Ensure the material is assigned to the star
+  starMaterial.emissiveColor = new Color3(0, 0, 0.5); 
+  star.material = starMaterial; 
 
-  // Function to continuously animate the star's emissive color for a twinkling effect
+ 
   let animateStar = () => {
-    // Change the emissive color at intervals to create a sparkling effect
     setInterval(() => {
       starMaterial.emissiveColor = new Color3(
         0, 
         0, 
-        Math.random() * 0.5 // Random B component (0 to 0.5 for dark blue shades)
+        Math.random() * 0.5 
       );
-    }, 500); // Change every 0.5 seconds (adjust the timing as needed)
+    }, 500); 
   };
 
-  // Call the function to start the animation
+  
   animateStar();
 
-  // Shadows for the star
+  
   star.receiveShadows = true;
   return star;
 }
 
-// Function to create a box and handle click event
+
 function createClickableBox(scene: Scene, x: number, y: number, z: number) {
   let box: Mesh = MeshBuilder.CreateBox("clickableBox", { size: 1 }, scene);
   box.position = new Vector3(x, y, z);
 
-  // Create a material for the box with a light baby blue color
+  
   const material = new StandardMaterial("boxMaterial", scene);
-  material.diffuseColor = new Color3(0.5, 0.5, 1.0); // Light baby blue color (R: 0.5, G: 0.5, B: 1.0)
+  material.diffuseColor = new Color3(0.5, 0.5, 1.0); 
   box.material = material
 
-  // Event listener for click event on the box
+  
   box.actionManager = new ActionManager(scene);
   box.actionManager.registerAction(
     new ExecuteCodeAction(
@@ -339,7 +335,6 @@ function createClickableBox(scene: Scene, x: number, y: number, z: number) {
       },
       function () {
         box.position.y += 0.2;
-        // Generate a star when the box is clicked
         let starPosition = new Vector3(box.position.x, box.position.y + 1, box.position.z);
         createStar(scene, starPosition);
       }
@@ -350,8 +345,9 @@ function createClickableBox(scene: Scene, x: number, y: number, z: number) {
 }
 
 ////----------------------------------------------------------
-//BOTTOM OF CODE - MAIN RENDERING AREA FOR YOUR SCENE
+//BOTTOM OF CODE
 ////----------------------------------------------------------
+
   export default function GameScene(engine: Engine) {
     interface SceneData {
       scene: Scene;
@@ -370,6 +366,8 @@ function createClickableBox(scene: Scene, x: number, y: number, z: number) {
       planet?: Mesh;
       jupiter?: Mesh;
       secondPlanet?: Mesh;
+      shadowGeneratorForPlanet?: ShadowGenerator;
+      shadowGeneratorForSecondPlanet?: ShadowGenerator;
     }
 
     
@@ -384,26 +382,42 @@ function createClickableBox(scene: Scene, x: number, y: number, z: number) {
       }
     });
   
-    // A function that gets called before each frame is rendered
+   
     that.scene.registerBeforeRender(() => {
-      // Rotate the planet about its Y-axis by a small angle
+     
       if (that.planet) {
-        that.planet.rotation.y += 0.002; //Rotation speed
+        that.planet.rotation.y += 0.002; 
       }
 
       if (that.secondPlanet) {
-        that.secondPlanet.rotation.z += 0.002; //Rotation speed
+        that.secondPlanet.rotation.z += 0.002; 
       }
     });
 
    that.box = createBox(that.scene, 2, 5, 2);
-   that.ground = createGround(that.scene);
+  //  that.ground = createGround(that.scene);
+  //  that.ground.receiveShadows = true; // Enable the ground to receive shadows
    that.box = createClickableBox(that.scene, 7, 0.5, -2);
-   that.planet = createPlanet(that.scene, -4, 7, 5);
-   that.secondPlanet = createSecondPlanet(that.scene, -4, 5, 8);
-   
+  //  that.planet = createPlanet(that.scene, -4, 7, 5);
+  //  that.planet.receiveShadows = true; // Enable the planet to receive shadows
+  //  that.planet.castShadows = true; // Enable the planet to cast shadows
 
-    //any further code goes here
+  //  that.secondPlanet = createSecondPlanet(that.scene, -4, 5, 8);
+  //  that.secondPlanet.receiveShadows = true; // Enable the planet to receive shadows
+  //  that.secondPlanet.castShadows = true; // Enable the planet to cast shadows
+
+  that.hemisphericLight = createHemiLight(that.scene);
+
+  that.ground = createGround(that.scene);
+  that.ground.receiveShadows = true;
+
+  that.planet = createPlanet(that.scene, -4, 7, 5);
+  that.planet.receiveShadows = true;
+
+  that.secondPlanet = createSecondPlanet(that.scene, -4, 5, 8);
+  that.secondPlanet.receiveShadows = true;
+
+   
     that.terrain = createTerrain(that.scene);
     that.ground = createGround(that.scene);
     that.skybox = skyBox(that.scene);
@@ -442,8 +456,9 @@ function createClickableBox(scene: Scene, x: number, y: number, z: number) {
     that.stars.push(createStar(that.scene, new Vector3(1, 3, -5)));
     that.stars.push(createStar(that.scene, new Vector3(1, 2, -3)));
 
-    //Scene Lighting & Camera
+
     that.hemisphericLight = createHemiLight(that.scene);
+    that.light = createAnyLight(that.scene, 2, 0, 10, 0, 255, 255, 255, that.planet);
     that.camera = createArcRotateCamera(that.scene);
     return that;
   }
