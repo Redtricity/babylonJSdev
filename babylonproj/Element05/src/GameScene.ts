@@ -62,19 +62,19 @@ import {
   }
 
 
-  function createTerrain(scene: Scene) 
-  {
-    const largeGroundMat = new StandardMaterial("largeGroundMat", scene);
-    largeGroundMat.diffuseTexture = new Texture("./assets/8k_moon.jpg");
+  // function createTerrain(scene: Scene) 
+  // {
+  //   const largeGroundMat = new StandardMaterial("largeGroundMat", scene);
+  //   largeGroundMat.diffuseTexture = new Texture("./assets/8k_moon.jpg");
 
-    const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "./assets/8k_moon_inverted.jpg", {width:600, height:600, subdivisions: 1500, minHeight:0, maxHeight: 2});
-    const groundAggregate = new PhysicsAggregate(largeGround, PhysicsShapeType.BOX, { mass: 0 }, scene);
-    //groundAggregate.transformNode.position.y = 2;
-    //groundAggregate.position.y
-    largeGround.material = largeGroundMat;
-    largeGround.receiveShadows = true;
-    return largeGround;
-  }
+  //   const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "./assets/8k_moon_inverted.jpg", {width:600, height:600, subdivisions: 1500, minHeight:0, maxHeight: 2});
+  //   const groundAggregate = new PhysicsAggregate(largeGround, PhysicsShapeType.BOX, { mass: 0 }, scene);
+  //   //groundAggregate.transformNode.position.y = 2;
+  //   //groundAggregate.position.y
+  //   largeGround.material = largeGroundMat;
+  //   largeGround.receiveShadows = true;
+  //   return largeGround;
+  // }
 
   function createBox(scene, x, y, z){
   let box: Mesh = MeshBuilder.CreateBox("box", { size: 1 }, scene);
@@ -94,7 +94,7 @@ import {
     const skybox = MeshBuilder.CreateBox("skyBox", {size:150}, scene);
 	  const skyboxMaterial = new StandardMaterial("skyBox", scene);
 	  skyboxMaterial.backFaceCulling = false;
-	  skyboxMaterial.reflectionTexture = new CubeTexture("textures/space", scene);
+	  skyboxMaterial.reflectionTexture = new CubeTexture("./assets/space", scene);
 	  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
 	  skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
 	  skyboxMaterial.specularColor = new Color3(0, 0, 0);
@@ -194,7 +194,7 @@ let runningSpeed: number = 0.4;
 
 function importPlayerMesh(scene: Scene, collider: Mesh, x: number, y: number) {
   let tempItem = { flag: false } 
-  let item: any = SceneLoader.ImportMesh("", "./models/", "dummy3.babylon", scene, function(newMeshes, particleSystems, skeletons) {
+  let item: any = SceneLoader.ImportMesh("", "./assets/models/", "dummy3.babylon", scene, function(newMeshes, particleSystems, skeletons) {
     let mesh = newMeshes[0];
     let skeleton = skeletons[0];
     skeleton.animationPropertiesOverride = new AnimationPropertiesOverride();
@@ -418,7 +418,7 @@ function createClickableBox(scene: Scene, x: number, y: number, z: number) {
   that.secondPlanet.receiveShadows = true;
 
    
-    that.terrain = createTerrain(that.scene);
+    //that.terrain = createTerrain(that.scene);
     that.ground = createGround(that.scene);
     that.skybox = skyBox(that.scene);
     that.actionManager = actionManager(that.scene);
