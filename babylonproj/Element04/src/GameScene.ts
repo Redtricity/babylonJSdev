@@ -53,7 +53,7 @@ import {
   function createGround(scene: Scene) {
     //Create Village ground
     const groundMat = new StandardMaterial("groundMat");
-    groundMat.diffuseTexture = new Texture("./textures/8k_moon.jpg");
+    groundMat.diffuseTexture = new Texture("./assets/8k_moon.jpg");
     groundMat.diffuseTexture.hasAlpha = true;
 
     const ground = MeshBuilder.CreateGround("ground", {width:24, height:24});
@@ -68,9 +68,9 @@ import {
   function createTerrain(scene: Scene) 
   {
     const largeGroundMat = new StandardMaterial("largeGroundMat", scene);
-    largeGroundMat.diffuseTexture = new Texture("textures/8k_moon.jpg");
+    largeGroundMat.diffuseTexture = new Texture("./assets/8k_moon.jpg");
 
-    const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "./textures/8k_moon_inverted.jpg", {width:600, height:600, subdivisions: 1500, minHeight:0, maxHeight: 2});
+    const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "./assets/8k_moon_inverted.jpg", {width:600, height:600, subdivisions: 1500, minHeight:0, maxHeight: 2});
     const groundAggregate = new PhysicsAggregate(largeGround, PhysicsShapeType.BOX, { mass: 0 }, scene);
     //groundAggregate.transformNode.position.y = 2;
       //groundAggregate.position.y
@@ -99,7 +99,7 @@ import {
     const skybox = MeshBuilder.CreateBox("skyBox", {size:150}, scene);
 	  const skyboxMaterial = new StandardMaterial("skyBox", scene);
 	  skyboxMaterial.backFaceCulling = false;
-	  skyboxMaterial.reflectionTexture = new CubeTexture("textures/space", scene);
+	  skyboxMaterial.reflectionTexture = new CubeTexture("./assets/space", scene);
 	  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
 	  skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
 	  skyboxMaterial.specularColor = new Color3(0, 0, 0);
@@ -169,7 +169,7 @@ let runningSpeed: number = 0.4;
 
 function importPlayerMesh(scene: Scene, collider: Mesh, x: number, y: number) {
   let tempItem = { flag: false } 
-  let item: any = SceneLoader.ImportMesh("", "./models/", "dummy3.babylon", scene, function(newMeshes, particleSystems, skeletons) {
+  let item: any = SceneLoader.ImportMesh("", "./assets/models/", "dummy3.babylon", scene, function(newMeshes, particleSystems, skeletons) {
     let mesh = newMeshes[0];
     let skeleton = skeletons[0];
     skeleton.animationPropertiesOverride = new AnimationPropertiesOverride();

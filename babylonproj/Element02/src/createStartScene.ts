@@ -35,9 +35,9 @@ import {
   function createTerrain(scene: Scene) 
   {
     const largeGroundMat = new StandardMaterial("largeGroundMat", scene);
-    largeGroundMat.diffuseTexture = new Texture("Assets/textures/8k_moon.jpg");
+    largeGroundMat.diffuseTexture = new Texture("./assets/8k_moon.jpg");
 
-    const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "Assets/textures/8k_moon_inverted.jpg", {width:600, height:600, subdivisions: 1500, minHeight:0, maxHeight: 2});
+    const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "./assets/8k_moon_inverted.jpg", {width:600, height:600, subdivisions: 1500, minHeight:0, maxHeight: 2});
     largeGround.material = largeGroundMat;
     largeGround.receiveShadows = true;
     return largeGround;
@@ -49,7 +49,7 @@ import {
     const skybox = MeshBuilder.CreateBox("skyBox", {size:1000}, scene);
 	  const skyboxMaterial = new StandardMaterial("skyBox", scene);
 	  skyboxMaterial.backFaceCulling = false;
-	  skyboxMaterial.reflectionTexture = new CubeTexture("textures/space", scene);
+	  skyboxMaterial.reflectionTexture = new CubeTexture("./assets/space", scene);
 	  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
 	  skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
 	  skyboxMaterial.specularColor = new Color3(0, 0, 0);
@@ -102,7 +102,7 @@ import {
 
   
   function createAliens(scene: Scene) {
-    const spriteManagerAliens = new SpriteManager("alienManager", "src/BlueAlien.png", 2000, { width: 512, height: 1024 }, scene);
+    const spriteManagerAliens = new SpriteManager("alienManager", "./assets/BlueAlien.png", 2000, { width: 512, height: 1024 }, scene);
 
   
   for (let i = 0; i < 500; i++) {

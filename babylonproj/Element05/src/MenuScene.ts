@@ -42,7 +42,7 @@ import {
     const skybox = MeshBuilder.CreateBox("skyBox", {size:150}, scene);
 	  const skyboxMaterial = new StandardMaterial("skyBox", scene);
 	  skyboxMaterial.backFaceCulling = false;
-	  skyboxMaterial.reflectionTexture = new CubeTexture("textures/space", scene);
+	  skyboxMaterial.reflectionTexture = new CubeTexture("assets/space", scene);
 	  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
 	  skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
 	  skyboxMaterial.specularColor = new Color3(0, 0, 0);
@@ -117,7 +117,7 @@ function createSceneButton(scene: Scene, name: string, index: string, x: string,
   button.cornerRadius = 20;
   button.background = "#00008B"; // Dark blue color
 
-  const buttonClick = new Sound("MenuClickSFX", "./audio/menu-click.wav", scene, null, {
+  const buttonClick = new Sound("MenuClickSFX", "./assets/audio/menu-click.wav", scene, null, {
     loop: false,
     autoplay: false,
   });
@@ -141,7 +141,7 @@ function createSceneButton(scene: Scene, name: string, index: string, x: string,
 // }
 
 function createBackgroundMusic(scene: Scene) {
-  const backgroundMusic = new Sound("BackgroundMusic", "./audio/391840__vabsounds__space.wav", scene, null, {
+  const backgroundMusic = new Sound("BackgroundMusic", "./assets/audio/391840__vabsounds__space.wav", scene, null, {
     loop: true,
     autoplay: true,
   });

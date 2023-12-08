@@ -49,7 +49,7 @@ import {
   function createGround(scene: Scene) {
  
     const groundMat = new StandardMaterial("groundMat");
-    groundMat.diffuseTexture = new Texture("./textures/8k_moon.jpg");
+    groundMat.diffuseTexture = new Texture("./assets/8k_moon.jpg");
     groundMat.diffuseTexture.hasAlpha = true;
 
     const ground = MeshBuilder.CreateGround("ground", {width:24, height:24});
@@ -65,9 +65,9 @@ import {
   function createTerrain(scene: Scene) 
   {
     const largeGroundMat = new StandardMaterial("largeGroundMat", scene);
-    largeGroundMat.diffuseTexture = new Texture("textures/8k_moon.jpg");
+    largeGroundMat.diffuseTexture = new Texture("./assets/8k_moon.jpg");
 
-    const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "textures/8k_moon_inverted.jpg", {width:600, height:600, subdivisions: 1500, minHeight:0, maxHeight: 2});
+    const largeGround = MeshBuilder.CreateGroundFromHeightMap("largeGround", "./assets/8k_moon_inverted.jpg", {width:600, height:600, subdivisions: 1500, minHeight:0, maxHeight: 2});
     const groundAggregate = new PhysicsAggregate(largeGround, PhysicsShapeType.BOX, { mass: 0 }, scene);
     //groundAggregate.transformNode.position.y = 2;
     //groundAggregate.position.y
@@ -108,7 +108,7 @@ import {
   
     let planetMaterial = new StandardMaterial("planetMaterial", scene);
     // planetMaterial.diffuseColor = new Color3(0, 0, 1);
-    planetMaterial.diffuseTexture = new Texture("./src/8k_sun.jpg", scene); // Adding the texture
+    planetMaterial.diffuseTexture = new Texture("./assets/8k_sun.jpg", scene); // Adding the texture
     planet.material = planetMaterial;
 
     planet.position.x = px;
@@ -128,7 +128,7 @@ import {
 
     let secondPlanetMaterial = new StandardMaterial("secondPlanetMaterial", scene);
     //planetMaterial.diffuseColor = new Color3(0, 0, 1);
-    secondPlanetMaterial.diffuseTexture = new Texture("./src/8k_jupiter.jpg", scene); // Adding the texture
+    secondPlanetMaterial.diffuseTexture = new Texture("./assets/8k_jupiter.jpg", scene); // Adding the texture
     secondPlanet.material = secondPlanetMaterial;
 
   return secondPlanet;

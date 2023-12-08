@@ -35,7 +35,7 @@ function createPlanet(scene: Scene) {
   planet.position.y = 1;
 
   let planetMaterial = new StandardMaterial("planetMaterial", scene);
-  planetMaterial.diffuseTexture = new Texture("textures/8k_earth_daymap.jpg", scene); // Adding the texture
+  planetMaterial.diffuseTexture = new Texture("./assets/8k_earth_daymap.jpg", scene); // Adding the texture
   planet.material = planetMaterial;
 
   // Shadows for the planet
@@ -77,7 +77,7 @@ function createMoon(scene: Scene) {
   moon.position = new Vector3(4, 2, 0); // Position the moon accordingly
 
   let moonMaterial = new StandardMaterial("moonMaterial", scene);
-  moonMaterial.diffuseTexture = new Texture("textures/8k_moon.jpg", scene); // Moon texture
+  moonMaterial.diffuseTexture = new Texture("./assets/8k_moon.jpg", scene); // Moon texture
   moon.material = moonMaterial;
 
   // Shadows for the moon
@@ -135,7 +135,7 @@ function createArcRotateCamera(scene: Scene) {
     const skybox = MeshBuilder.CreateBox("skyBox", {size:150}, scene);
 	  const skyboxMaterial = new StandardMaterial("skyBox", scene);
 	  skyboxMaterial.backFaceCulling = false;
-	  skyboxMaterial.reflectionTexture = new CubeTexture("textures/space", scene);
+	  skyboxMaterial.reflectionTexture = new CubeTexture("./assets/space", scene);
 	  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
 	  skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
 	  skyboxMaterial.specularColor = new Color3(0, 0, 0);

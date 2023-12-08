@@ -8,7 +8,15 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "Element01build": "tsc && vite build Element01",
-    "Element01preview": "vite preview Element01"
+    "Element01preview": "vite preview Element01",
+    "Element02build": "tsc && vite build Element02",
+    "Element02preview": "vite preview Element02",
+    "Element03build": "tsc && vite build Element03",
+    "Element03preview": "vite preview Element03",
+    "Element04build": "tsc && vite build Element04",
+    "Element04preview": "vite preview Element04",
+    "Element05build": "tsc && vite build Element05",
+    "Element05preview": "vite preview Element05"
   },
   "devDependencies": {
     "typescript": "^5.0.2",
