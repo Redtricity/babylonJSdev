@@ -71,14 +71,6 @@ function createAnyLight(scene: Scene, index: number, px: number, py: number, pz:
       shadowGenerator.useExponentialShadowMap = true;
       return spotLight;
       break;
-    // case 3: //point light
-    //   const pointLight = new PointLight("pointLight", new Vector3(px, py, pz), scene);
-    //   pointLight.diffuse = new Color3(colX, colY, colZ); //0.39, 0.44, 0.91
-    //   shadowGenerator = new ShadowGenerator(1024, pointLight);
-    //   shadowGenerator.addShadowCaster(mesh);
-    //   shadowGenerator.useExponentialShadowMap = true;
-    //   return pointLight;
-    //   break;
   }
 }
 
